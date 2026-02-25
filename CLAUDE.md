@@ -25,93 +25,109 @@ Claude should always orient itself through `/prime` at session start, then act w
 
 ---
 
+## Kinroot Quick Context
+
+**Kinroot** is a personal household OS for parents carrying the mental load. Single-user, privacy-first, subscription-funded.
+
+- **Modules:** Root Planner (dashboard), Kin Calendar, Mealflow, Village Network, Taskboard
+- **Tiers:** Free ($0, 1 child) | Plus ($12.99/mo, unlimited) | Premium Plus ($24.99/mo, AI features)
+- **Stage:** Closed beta, 17 testers
+- **Stack:** Next.js 15 + React 19 + Supabase + Stripe + Tailwind CSS v4 + shadcn/ui
+- **Paradigm:** Kids are data, not users. No multi-user. No co-parenting coordination.
+
+---
+
 ## Workspace Structure
 
-```
-.
-├── CLAUDE.md                # This file — core context, always loaded
-├── .env.example             # Template for environment variables (API keys, etc.)
-├── .gitignore               # Keeps secrets and generated files out of git
-├── .claude/
-│   ├── commands/            # Slash commands Claude can execute
-│   │       ├── prime.md         # /prime — session initialization
-│   │       ├── create-plan.md   # /create-plan — create implementation plans
-│   │       ├── implement.md     # /implement — execute plans
-│   │       ├── weekly-report.md # /weekly-report — generate weekly summary
-│   │       ├── research.md      # /research — deep-dive research on a topic
-│   │       └── draft-email.md   # /draft-email — draft a professional email
-│   └── skills/              # Reusable skill definitions
-├── context/                 # Background context about Kinroot and your role
-│                            # (Role, business info, strategy, metrics)
-├── plans/                   # Implementation plans created by /create-plan
-├── outputs/                 # Work products and deliverables
-├── reference/               # Templates, examples, reusable patterns
-├── scripts/                 # Automation scripts (if applicable)
-├── README.md                # Setup and usage guide
-└── shell-aliases.md         # Optional shell shortcuts for faster workflows
-```
-
-**Key directories:**
-
-| Directory      | Purpose                                                                                                          |
-| -------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `context/`     | Who you are, Kinroot's business context, current strategy, and key metrics. Read by `/prime`.                     |
-| `plans/`       | Detailed implementation plans. Created by `/create-plan`, executed by `/implement`.                               |
-| `outputs/`     | Deliverables, analyses, reports, and work products.                                                              |
-| `reference/`   | Helpful docs, templates and patterns to assist in various workflows.                                             |
-| `scripts/`     | Any automation or tooling scripts.                                                                               |
+    .
+    CLAUDE.md                 # This file — core context, always loaded
+    .env.example              # Template for environment variables
+    .gitignore                # Keeps secrets and generated files out of git
+    .claude/
+      commands/               # Slash commands Claude can execute
+        prime.md              # /prime — session initialization
+        create-plan.md        # /create-plan — create implementation plans
+        implement.md          # /implement — execute plans
+        weekly-report.md      # /weekly-report — weekly progress summary
+        research.md           # /research — deep-dive research
+        draft-email.md        # /draft-email — draft professional email
+        beta-update.md        # /beta-update — beta tester communications
+        beta-metrics.md       # /beta-metrics — pull and analyze beta data
+        feature-spec.md       # /feature-spec — write feature specifications
+        competitor-analysis.md # /competitor-analysis — competitive research
+        content-brief.md      # /content-brief — marketing content creation
+        launch-readiness.md   # /launch-readiness — launch readiness assessment
+      skills/                 # Reusable skill definitions
+        skill-creator/        # Framework for building new skills
+        mcp-integration/      # MCP server integration guide
+    context/                  # Background context about Kinroot and your role
+      personal-info.md        # Your role as Co-Founder & COO
+      business-info.md        # Kinroot product, modules, pricing, stage
+      strategy.md             # Q1 2026 priorities and targets
+      current-data.md         # Key metrics snapshot (refresh regularly)
+    reference/                # Templates, brand guidelines, competitive intel
+      brand-voice.md          # Voice pillars, tone, writing rules, module names
+      email-templates.md      # Reusable email templates for beta comms
+      feature-spec-template.md # Template for writing feature specs
+      competitive-landscape.md # Competitor profiles, SWOT, pricing context
+    scripts/                  # Automation and data queries
+      pull-metrics.sql        # Supabase SQL queries for all key metrics
+      refresh-context.md      # Guide for updating current-data.md
+    plans/                    # Implementation plans created by /create-plan
+    outputs/                  # Work products and deliverables
+    README.md                 # Setup and usage guide
+    shell-aliases.md          # Optional shell shortcuts for faster workflows
 
 ---
 
 ## Commands
 
-### /prime
+### Session Management
 
-**Purpose:** Initialize a new session with full context awareness.
+| Command | Purpose |
+|---------|---------|
+| /prime | Initialize session — loads context, confirms readiness |
+| /create-plan [request] | Create a detailed implementation plan in plans/ |
+| /implement [plan-path] | Execute a plan step-by-step |
 
-Run this at the start of every session. Claude will:
+### General Purpose
 
-1. Read CLAUDE.md and context files
-2. Summarize understanding of the user, workspace, and goals
-3. Confirm readiness to assist
+| Command | Purpose |
+|---------|---------|
+| /weekly-report | Generate weekly progress and performance summary |
+| /research [topic] | Deep-dive research with actionable recommendations |
+| /draft-email [recipient] [purpose] | Draft a professional email in your voice |
 
-### /create-plan [request]
+### Kinroot-Specific
 
-**Purpose:** Create a detailed implementation plan before making changes.
+| Command | Purpose |
+|---------|---------|
+| /beta-update [type] | Draft beta tester comms (weekly, feedback-request, monthly-recap, milestone) |
+| /beta-metrics [focus] | Pull live Supabase data and analyze beta program health |
+| /feature-spec [feature] | Write a full feature specification with DB schema, API design, and components |
+| /competitor-analysis [target] | Research and analyze a competitor against Kinroot positioning |
+| /content-brief [request] | Create marketing content (blog, social, landing page copy) aligned with brand voice |
+| /launch-readiness [scope] | Assess product, marketing, and operations readiness for launch |
 
-Use when adding new functionality, commands, scripts, or making structural changes. Produces a thorough plan document in `plans/` that captures context, rationale, and step-by-step tasks.
+---
 
-Example: `/create-plan add a competitor analysis command`
+## Reference Files
 
-### /implement [plan-path]
+| File | Use When |
+|------|----------|
+| reference/brand-voice.md | Writing any external-facing content (emails, blog, social, copy) |
+| reference/email-templates.md | Drafting beta comms or marketing emails |
+| reference/feature-spec-template.md | Speccing out a new feature |
+| reference/competitive-landscape.md | Positioning, marketing, or feature prioritization discussions |
 
-**Purpose:** Execute a plan created by /create-plan.
+---
 
-Reads the plan, executes each step in order, validates the work, and updates the plan status.
+## Scripts
 
-Example: `/implement plans/2026-01-28-competitor-analysis-command.md`
-
-### /weekly-report
-
-**Purpose:** Generate a weekly performance and progress summary.
-
-Reads context files for current metrics and priorities, then produces a formatted report in `outputs/` covering key wins, blockers, metrics movement, and recommendations for the week ahead.
-
-### /research [topic]
-
-**Purpose:** Conduct deep-dive research on a given topic.
-
-Produces a structured research brief in `outputs/` with findings, key takeaways, and actionable recommendations grounded in Kinroot's context and strategic goals.
-
-Example: `/research single parent app market landscape 2026`
-
-### /draft-email [recipient] [purpose]
-
-**Purpose:** Draft a professional email aligned with your voice and goals.
-
-Uses context files to match tone and strategic positioning, then produces a ready-to-send draft in `outputs/`.
-
-Example: `/draft-email beta testers monthly update and feedback request`
+| File | Purpose |
+|------|---------|
+| scripts/pull-metrics.sql | SQL queries for all key Kinroot metrics — run via Supabase dashboard or MCP |
+| scripts/refresh-context.md | Guide for updating context/current-data.md with fresh data |
 
 ---
 
