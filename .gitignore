@@ -1,0 +1,26 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/settings.json
+
+# Node modules (if using MCP servers)
+node_modules/
+
+# Python virtual environments
+venv/
+.venv/
+__pycache__/
+
+# Temporary files
+*.tmp
+*.bak
