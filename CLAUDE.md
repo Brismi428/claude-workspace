@@ -27,29 +27,37 @@ Claude should always orient itself through `/prime` at session start, then act w
 
 ```
 .
-├── CLAUDE.md              # This file — core context, always loaded
+├── CLAUDE.md                # This file — core context, always loaded
+├── .env.example             # Template for environment variables (API keys, etc.)
+├── .gitignore               # Keeps secrets and generated files out of git
 ├── .claude/
-│   └── commands/          # Slash commands Claude can execute
-│       ├── prime.md       # /prime — session initialization
-│       ├── create-plan.md  # /create-plan — create implementation plans
-│       └── implement.md   # /implement — execute plans
-├── context/               # Background context about the user and project
-│                          # (User should populate with role, goals, strategies)
-├── plans/                 # Implementation plans created by /create-plan
-├── outputs/               # Work products and deliverables
-├── reference/             # Templates, examples, reusable patterns
-└── scripts/               # Automation scripts (if applicable)
+│   ├── commands/            # Slash commands Claude can execute
+│   │       ├── prime.md         # /prime — session initialization
+│   │       ├── create-plan.md   # /create-plan — create implementation plans
+│   │       ├── implement.md     # /implement — execute plans
+│   │       ├── weekly-report.md # /weekly-report — generate weekly summary
+│   │       ├── research.md      # /research — deep-dive research on a topic
+│   │       └── draft-email.md   # /draft-email — draft a professional email
+│   └── skills/              # Reusable skill definitions
+├── context/                 # Background context about the user and project
+│                            # (User should populate with role, goals, strategies)
+├── plans/                   # Implementation plans created by /create-plan
+├── outputs/                 # Work products and deliverables
+├── reference/               # Templates, examples, reusable patterns
+├── scripts/                 # Automation scripts (if applicable)
+├── README.md                # Setup and usage guide
+└── shell-aliases.md         # Optional shell shortcuts for faster workflows
 ```
 
 **Key directories:**
 
-| Directory    | Purpose                                                                             |
-| ------------ | ----------------------------------------------------------------------------------- |
-| `context/`   | Who the user is, their role, current priorities, strategies. Read by `/prime`.      |
-| `plans/`     | Detailed implementation plans. Created by `/create-plan`, executed by `/implement`. |
-| `outputs/`   | Deliverables, analyses, reports, and work products.                                 |
-| `reference/` | Helpful docs, templates and patterns to assist in various workflows.                |
-| `scripts/`   | Any automation or tooling scripts.                                                  |
+| Directory      | Purpose                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `context/`     | Who the user is, their role, current priorities, strategies. Read by `/prime`.                                    |
+| `plans/`       | Detailed implementation plans. Created by `/create-plan`, executed by `/implement`.                               |
+| `outputs/`     | Deliverables, analyses, reports, and work products.                                                              |
+| `reference/`   | Helpful docs, templates and patterns to assist in various workflows.                                             |
+| `scripts/`     | Any automation or tooling scripts.                                                                               |
 
 ---
 
@@ -81,6 +89,28 @@ Reads the plan, executes each step in order, validates the work, and updates the
 
 Example: `/implement plans/2026-01-28-competitor-analysis-command.md`
 
+### /weekly-report
+
+**Purpose:** Generate a weekly performance and progress summary.
+
+Reads context files for current metrics and priorities, then produces a formatted report in `outputs/` covering key wins, blockers, metrics movement, and recommendations for the week ahead.
+
+### /research [topic]
+
+**Purpose:** Conduct deep-dive research on a given topic.
+
+Produces a structured research brief in `outputs/` with findings, key takeaways, and actionable recommendations grounded in the user's context and strategic goals.
+
+Example: `/research emerging trends in B2B content marketing`
+
+### /draft-email [recipient] [purpose]
+
+**Purpose:** Draft a professional email aligned with the user's voice and goals.
+
+Uses context files to match tone and strategic positioning, then produces a ready-to-send draft in `outputs/`.
+
+Example: `/draft-email VP of Sales quarterly pipeline review`
+
 ---
 
 ## Critical Instruction: Maintain This File
@@ -95,35 +125,3 @@ After any change — adding commands, scripts, workflows, or modifying structure
 4. Does context/ need new files to capture this?
 
 If yes to any, update the relevant sections. This file must always reflect the current state of the workspace so future sessions have accurate context.
-
-**Examples of changes requiring CLAUDE.md updates:**
-
-- Adding a new slash command → add to Commands section
-- Creating a new output type → document in Workspace Structure or create a section
-- Adding a script → document its purpose and usage
-- Changing workflow patterns → update relevant documentation
-
----
-
-## For Users Downloading This Template
-
-To customize this workspace to your own needs, fill in your context documents in `context/` and modify as needed. Then use `/create-plan` to plan out and `/implement` to execute any structural changes. This ensures everything stays in sync — especially CLAUDE.md, which must always reflect the current state of the workspace.
-
----
-
-## Session Workflow
-
-1. **Start**: Run `/prime` to load context
-2. **Work**: Use commands or direct Claude with tasks
-3. **Plan changes**: Use `/create-plan` before significant additions
-4. **Execute**: Use `/implement` to execute plans
-5. **Maintain**: Claude updates CLAUDE.md and context/ as the workspace evolves
-
----
-
-## Notes
-
-- Keep context minimal but sufficient — avoid bloat
-- Plans live in `plans/` with dated filenames for history
-- Outputs are organized by type/purpose in `outputs/`
-- Reference materials go in `reference/` for reuse
